@@ -1,7 +1,9 @@
 const express = require('express')
 const mongoose = require('mongoose')//載入mongoose
-const exphbs = require('express-handlebars'); 
+const exphbs = require('express-handlebars');
 const app = express()
+const Todo = require('./models/todo')//載入Todo
+
 
 
 
@@ -23,12 +25,20 @@ db.once('open', () => {
   console.log('mongodb connected')
 })
 
+
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
 app.get('/', (req, res) => {
-  res.render('index')
+  //拿到全部todo的資料
+  Todo.find()
+    .lean()
+    .then(todos => res.render('index', { todos }))
+    .catch(error => console.error(error))
+
+
 })
+
 
 app.listen(3000, () => {
   console.log('App is running on http://localhost:3000/.')
