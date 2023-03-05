@@ -26,7 +26,7 @@ db.once('open', () => {
   console.log('mongodb connected')
 })
 
-
+//樣板引擎
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
@@ -68,10 +68,18 @@ app.get('/todos/:id/edit', (req, res) => {
 
 app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
-  const name = req.body.name
+  // const name = req.body.name
+  // const isDone = req.body.isDone
+  const { name, isDone } = req.body
   return Todo.findById(id)
     .then(todo => {
       todo.name = name
+      todo.isDone = isDone === 'on'
+      // if (isDone === 'on') {
+      //   todo.isDone = true
+      // } else {
+      //   toolbar.isDone = false
+      // }
       return todo.save()
     })
     .then(() => res.redirect(`/todos/${id}`))
