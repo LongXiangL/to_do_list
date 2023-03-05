@@ -37,6 +37,7 @@ app.get('/', (req, res) => {
   //拿到全部todo的資料
   Todo.find()
     .lean()
+    .sort({ _id: 'asc' }) // 根據 _id 升冪排序
     .then(todos => res.render('index', { todos }))
     .catch(error => console.error(error))
 })
