@@ -1,9 +1,12 @@
-const express = require('express')
+const express = require('express')//載入express
 const mongoose = require('mongoose')//載入mongoose
-const exphbs = require('express-handlebars')
+const exphbs = require('express-handlebars')// 引用 handlebars
 const bodyParser = require('body-parser')// 引用 body-parser
+const methodOverride = require('method-override')//載入method-override
 const app = express()
 const Todo = require('./models/todo')//載入Todo
+
+
 
 
 
@@ -32,9 +35,11 @@ app.set('view engine', 'hbs')
 
 // 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(methodOverride('_method'))//設定每一筆請求都會透過methodOverride進行前置處理
 
+ //拿到全部todo的資料
+ 
 app.get('/', (req, res) => {
-  //拿到全部todo的資料
   Todo.find()
     .lean()
     .sort({ _id: 'asc' }) // 根據 _id 升冪排序
@@ -67,7 +72,7 @@ app.get('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
   // const name = req.body.name
   // const isDone = req.body.isDone
@@ -87,7 +92,7 @@ app.post('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
     .then(todo => todo.remove())
