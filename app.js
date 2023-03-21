@@ -19,6 +19,13 @@ app.use(bodyParser.urlencoded({ extended: true }))//每一筆請求先用body-pa
 app.use(methodOverride('_method'))//設定每一筆請求都會透過methodOverride進行前置處理
 
 usePassport(app)//呼叫Passport函式並傳入app，需放在路由之前處理
+app.use((req,res,next)=>{
+  console.log(req.user)
+  res.locals.isAuthenticated=req.isAuthenticated()
+  res.locals.user=req.user
+  next()
+})
+
 app.use(routes)// 將 request 導入路由器
 app.use(session({
   secret:"ThisIsMySecret",
