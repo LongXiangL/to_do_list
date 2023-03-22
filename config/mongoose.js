@@ -8,7 +8,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 
 //取得資料庫連線狀態
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 const db = mongoose.connection
 
 

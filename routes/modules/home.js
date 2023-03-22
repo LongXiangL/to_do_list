@@ -5,7 +5,8 @@ const router = express.Router()
 const Todo = require('../../models/todo')
 //定義首頁路由
 router.get('/', (req, res) => {
-  Todo.find()
+  const userId = req.user._id // 變數設定
+  Todo.find({ userId })  // 加入查詢條件{userId:req.user._id}
   //拿到全部的資料＝首頁
     .lean()
     .sort({ _id: 'asc' })//desc
