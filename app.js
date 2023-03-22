@@ -4,6 +4,7 @@ const usePassport = require('./config/passport')
 const exphbs = require('express-handlebars')// 引用 handlebars
 const bodyParser = require('body-parser')// 引用 body-parser
 const methodOverride = require('method-override')//載入method-override
+const flash = require('connect-flash')
 const PORT = process.env.PORT || 3000
 
 
@@ -26,14 +27,18 @@ app.use(session({
 
 usePassport(app)//呼叫Passport函式並傳入app，需放在路由之前處理
 
+app.use(flash()) // 掛載套件
 app.use((req, res, next) => {
   console.log(req.user)
   res.locals.isAuthenticated = req.isAuthenticated()
   res.locals.user = req.user
+  res.locals.success_msg = req.flash('success_msg')// 設定 success_msg 訊息
+  res.locals.warning_msg = req.flash('warning_msg')// 設定 warning_msg 訊息
   next()
 })
 
 app.use(routes)// 將 request 導入路由器
+
 
 app.listen(PORT, () => {
   console.log(`App is running on http://localhost:${PORT}`)
