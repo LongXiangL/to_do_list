@@ -5,13 +5,17 @@ const exphbs = require('express-handlebars')// 引用 handlebars
 const bodyParser = require('body-parser')// 引用 body-parser
 const methodOverride = require('method-override')//載入method-override
 const flash = require('connect-flash')
-const PORT = process.env.PORT || 3000
+ 
 
+// 加入這段 code, 僅在非正式環境時, 使用 dotenv
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+const PORT = process.env.PORT
 
 
 const routes = require('./routes')// 引用路由器
 require('./config/mongoose')
-
 
 const app = express()
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))//樣板引擎
@@ -20,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }))//每一筆請求先用body-pa
 app.use(methodOverride('_method'))//設定每一筆請求都會透過methodOverride進行前置處理
 
 app.use(session({
-  secret: "ThisIsMySecret",
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true
 }))
