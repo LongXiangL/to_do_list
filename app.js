@@ -33,7 +33,6 @@ usePassport(app)//呼叫Passport函式並傳入app，需放在路由之前處理
 
 app.use(flash()) // 掛載套件
 app.use((req, res, next) => {
-  console.log(req.user)
   res.locals.isAuthenticated = req.isAuthenticated()
   res.locals.user = req.user
   res.locals.success_msg = req.flash('success_msg')// 設定 success_msg 訊息
